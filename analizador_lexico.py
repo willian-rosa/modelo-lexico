@@ -40,12 +40,15 @@ class AnalizadorLexico:
         })
 
     def analize(self):
+
         for code in self.codes:
             self._analize_code(code['arquivo'], code['code'])
-            print('Finalizado anazlize lexica de: '+code['arquivo'])
-            for token in self.tabela_tokens:
-                print(token)
-            sys.exit()
+        return self.tabela_tokens
+
+    def clear(self):
+        self.tabela_tokens = []
+        self.codes = []
+
 
     def _analize_code(self, arquivo, code):
         self.linha = 1
@@ -121,14 +124,15 @@ class AnalizadorLexico:
         # Literal
         elif self.estado == self.ESTADO_LITERAL:
 
-            self.coletor = self.coletor + caracter
-
             if caracter == '"':
                 self.estado = self.ESTADO_INICIAL
                 if len(self.coletor) > 255:
                     self.add_error('Literal excedeu 255 caracteres.', arquivo)
                 else:
                     self.add_token(21, self.coletor, 'Literal')
+            else:
+                self.coletor = self.coletor + caracter
+
         # Identificador
         elif self.estado == self.ESTADO_IDENTIFICADOR:
 
