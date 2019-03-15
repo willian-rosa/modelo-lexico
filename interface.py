@@ -1,9 +1,9 @@
 from tkinter import *
-from analizador_lexico import AnalizadorLexico
+from analisador_lexico import AnalisadorLexico
   
 class Application:
 
-    analizador_lexico = None
+    analisador_lexico = None
     root = None
     container_esquerdo = None
 
@@ -12,8 +12,8 @@ class Application:
 
     items_result = []
 
-    def __init__(self, analizador_lexico: AnalizadorLexico):
-        self.analizador_lexico = analizador_lexico
+    def __init__(self, analisador_lexico: AnalisadorLexico):
+        self.analisador_lexico = analisador_lexico
 
     def start(self):
 
@@ -129,13 +129,13 @@ class Application:
 
     def click_analisar(self):
 
-        self.analizador_lexico.clear()
+        self.analisador_lexico.clear()
 
         code = self.txt.get("1.0", "end-1c")
-        self.analizador_lexico.add_codigo('', code)
+        self.analisador_lexico.add_codigo('', code)
 
         try:
-            tokens = self.analizador_lexico.analize()
+            tokens = self.analisador_lexico.analise()
             print(tokens)
             print('---------------------')
             self.create_grid(self.container_esquerdo, tokens)

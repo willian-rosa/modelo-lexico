@@ -1,7 +1,7 @@
 import sys
 
 
-class AnalizadorLexico:
+class AnalisadorLexico:
 
     ESTADO_INICIAL = 'inicial'
     ESTADO_LITERAL = 'literal'
@@ -39,10 +39,10 @@ class AnalizadorLexico:
             "code": code
         })
 
-    def analize(self):
+    def analise(self):
 
         for code in self.codes:
-            self._analize_code(code['arquivo'], code['code'])
+            self._analise_code(code['arquivo'], code['code'])
         return self.tabela_tokens
 
     def clear(self):
@@ -50,7 +50,7 @@ class AnalizadorLexico:
         self.codes = []
 
 
-    def _analize_code(self, arquivo, code):
+    def _analise_code(self, arquivo, code):
         self.linha = 1
         self.coluna = 1
 
@@ -66,7 +66,7 @@ class AnalizadorLexico:
             else:
                 self.coluna = self.coluna + 1
 
-            self._analize_caracter(arquivo, caracter)
+            self._analise_caracter(arquivo, caracter)
 
         if self.estado == self.ESTADO_LITERAL:
             self.add_error('Final do arquivo inesperado, esperando simbolo \'"\' .', arquivo)
@@ -116,7 +116,7 @@ class AnalizadorLexico:
         else:
             self.add_error('Simbolo inesperado \'' + caracter + '\'.', arquivo)
 
-    def _analize_caracter(self, arquivo, caracter):
+    def _analise_caracter(self, arquivo, caracter):
 
         if self.estado == self.ESTADO_INICIAL:
             self.define_estado_inicial(caracter, arquivo)
@@ -146,16 +146,16 @@ class AnalizadorLexico:
                     self.estado = self.ESTADO_INICIAL
                     self.add_token(is_palavra_reservada, self.coletor, 'Palavra Reservada')
 
-                    # voltando a analizar o caracter terminal
-                    self._analize_caracter(arquivo, caracter)
+                    # voltando a analisar o caracter terminal
+                    self._analise_caracter(arquivo, caracter)
                 elif len(self.coletor) > 30:
                     self.add_error('Idenficador atingiu tamanho maximo de 30 caracteres', arquivo)
                 else:
                     self.estado = self.ESTADO_INICIAL
                     self.add_token(19, self.coletor, 'Identificador')
 
-                    # voltando a analizar o caracter terminal
-                    self._analize_caracter(arquivo, caracter)
+                    # voltando a analisar o caracter terminal
+                    self._analise_caracter(arquivo, caracter)
         elif self.estado == self.ESTADO_INTEIRO:
             if self.numeros.count(caracter):
                 self.coletor = self.coletor + caracter
@@ -169,8 +169,8 @@ class AnalizadorLexico:
                 self.estado = self.ESTADO_INICIAL
                 self.add_token(20, self.coletor, 'Inteiro')
 
-                # voltando a analizar o caracter terminal
-                self._analize_caracter(arquivo, caracter)
+                # voltando a analisar o caracter terminal
+                self._analise_caracter(arquivo, caracter)
         elif self.estado == self.ESTADO_SINAL_MAIOR:
             if caracter == '=':
                 self.add_token(8, '>=', 'Sinal de Maior/Igual')
@@ -178,7 +178,7 @@ class AnalizadorLexico:
             else:
                 self.add_token(7, '>', 'Sinal de Maior')
                 self.estado = self.ESTADO_INICIAL
-                self._analize_caracter(arquivo, caracter)
+                self._analise_caracter(arquivo, caracter)
 
         elif self.estado == self.ESTADO_SINAL_MENOR:
             if caracter == '=':
@@ -190,7 +190,7 @@ class AnalizadorLexico:
             else:
                 self.add_token(9, '<', 'Sinal de Menor')
                 self.estado = self.ESTADO_INICIAL
-                self._analize_caracter(arquivo, caracter)
+                self._analise_caracter(arquivo, caracter)
 
         elif self.estado == self.ESTADO_SINAL_DOIS_PONTOS:
             if caracter == '=':
@@ -199,7 +199,7 @@ class AnalizadorLexico:
             else:
                 self.add_token(13, ':', 'Sinal dois pontos')
                 self.estado = self.ESTADO_INICIAL
-                self._analize_caracter(arquivo, caracter)
+                self._analise_caracter(arquivo, caracter)
 
         elif self.estado == self.ESTADO_SINAL_ABREPAR:
             if caracter == '*':

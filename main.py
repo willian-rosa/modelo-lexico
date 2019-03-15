@@ -1,10 +1,10 @@
-from analizador_lexico import AnalizadorLexico
+from analisador_lexico import AnalisadorLexico
 import glob
 import time
 from interface import Application
 
 
-al = AnalizadorLexico()
+al = AnalisadorLexico()
 
 app = Application(al)
 
@@ -13,7 +13,7 @@ app = Application(al)
 #     file = open(path_file, 'r')
 #     al.add_codigo(path_file, file.read())
 
-# al.analize()
+# al.analise()
 
 
 app.start()
