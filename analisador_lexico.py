@@ -1,7 +1,7 @@
-import sys
+from analisador import Analisador
 
 
-class AnalisadorLexico:
+class AnalisadorLexico(Analisador):
 
     ESTADO_INICIAL = 'inicial'
     ESTADO_LITERAL = 'literal'
@@ -16,7 +16,7 @@ class AnalisadorLexico:
     ESTADO_COMENTARIO_FECHANDO = 'comentario_fechando'
 
     letras = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-              'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+              'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v+', 'w', 'x', 'y', 'z',
               'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
               'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
@@ -49,8 +49,8 @@ class AnalisadorLexico:
         self.tabela_tokens = []
         self.codes = []
 
-
     def _analise_code(self, arquivo, code):
+
         self.linha = 1
         self.coluna = 1
 
@@ -72,6 +72,8 @@ class AnalisadorLexico:
             self.add_error('Final do arquivo inesperado, esperando simbolo \'"\' .', arquivo)
         elif self.estado != self.ESTADO_INICIAL:
             self.add_error('Erro no interpretador, estado atual: "'+self.estado+'".', arquivo)
+
+        self.add_token(self.ct_fim_sentenca, '$', 'Fim de sentença')
 
     def define_estado_inicial(self, caracter, arquivo):
         self.coletor = ''
@@ -102,15 +104,15 @@ class AnalisadorLexico:
         elif caracter == ':':
             self.estado = self.ESTADO_SINAL_DOIS_PONTOS
         elif caracter == ';':
-            self.add_token(14, caracter, 'Sinal de Ponto e Virgula')
+            self.add_token(self.ct_ponto_virgula, caracter, 'Sinal de Ponto e Virgula')
         elif caracter == ',':
             self.add_token(15, caracter, 'Sinal de Virgula')
         elif caracter == '.':
-            self.add_token(16, caracter, 'Sinal de Ponto')
+            self.add_token(self.ct_ponto, caracter, 'Sinal de Ponto')
         elif caracter == '(':
             self.estado = self.ESTADO_SINAL_ABREPAR
         elif caracter == ')':
-            self.add_token(16, caracter, 'Sinal de Fecha Parêntese')
+            self.add_token(self.ct_fecha_par, caracter, 'Sinal de Fecha Parêntese')
         elif caracter == ' ' or caracter == '\t' or caracter == '\r' or caracter == '\n':
             self.estado = self.ESTADO_INICIAL
         else:
@@ -152,7 +154,7 @@ class AnalisadorLexico:
                     self.add_error('Idenficador atingiu tamanho maximo de 30 caracteres', arquivo)
                 else:
                     self.estado = self.ESTADO_INICIAL
-                    self.add_token(19, self.coletor, 'Identificador')
+                    self.add_token(self.ct_identificador, self.coletor, 'Identificador')
 
                     # voltando a analisar o caracter terminal
                     self._analise_caracter(arquivo, caracter)
@@ -167,7 +169,7 @@ class AnalisadorLexico:
                 self.add_error('Valor inteiro ('+self.coletor+') fora da escala', arquivo)
             else:
                 self.estado = self.ESTADO_INICIAL
-                self.add_token(20, self.coletor, 'Inteiro')
+                self.add_token(self.ct_inteiro, self.coletor, 'Inteiro')
 
                 # voltando a analisar o caracter terminal
                 self._analise_caracter(arquivo, caracter)
@@ -205,7 +207,7 @@ class AnalisadorLexico:
             if caracter == '*':
                 self.estado = self.ESTADO_COMENTARIO
             else:
-                self.add_token(17, '(', 'Sinal Abre Parêntese')
+                self.add_token(self.ct_abre_par, '(', 'Sinal Abre Parêntese')
                 self.estado = self.ESTADO_INICIAL
 
         elif self.estado == self.ESTADO_COMENTARIO and caracter == '*':
@@ -234,7 +236,7 @@ class AnalisadorLexico:
     def verifica_coletor_palavras_reservadas(self):
         coletor = self.coletor.lower()
         if coletor == 'program':
-            return 22
+            return self.ct_program
         elif coletor == 'const':
             return 23
         elif coletor == 'var':
@@ -242,9 +244,9 @@ class AnalisadorLexico:
         elif coletor == 'procedure':
             return 25
         elif coletor == 'begin':
-            return 26
+            return self.ct_begin
         elif coletor == 'end':
-            return 27
+            return self.ct_end
         elif coletor == 'integer':
             return 28
         elif coletor == 'of':
@@ -266,9 +268,9 @@ class AnalisadorLexico:
         elif coletor == 'until':
             return 37
         elif coletor == 'readln':
-            return 38
+            return self.ct_readln
         elif coletor == 'writeln':
-            return 39
+            return self.ct_writeln
         elif coletor == 'or':
             return 40
         elif coletor == 'and':
