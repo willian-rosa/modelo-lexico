@@ -7,20 +7,32 @@ asintatico = AnalisadorSintatico()
 
 code = 'program \
             begin \
-                readln( x ); \
-                writeln( y ); \
+                readln( b ); \
             end.'
 
 alexico.clear()
 
-alexico.add_codigo('', code)
+tokens = None
 
-tokens = alexico.analise()
+try:
+    alexico.add_codigo('', code)
+    tokens = alexico.analise()
+except Exception as e:
+    print(e)
 
-for i in tokens:
-    print(i)
-print('======================================')
 
-asintatico.analise(tokens)
+if tokens != None:
+    # for i in tokens:
+    #     print(i)
+    # print('======================================')
 
-print('---------------------')
+    asintatico.analise(tokens)
+# try:
+#     pass
+#
+# except Exception as e:
+#     print(e)
+
+
+
+

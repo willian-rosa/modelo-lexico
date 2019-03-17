@@ -14,6 +14,29 @@ class AnalisadorSintatico(Analisador):
 
         return self.c_producao[self._get_in_parse(topo_pilha,codigo_token_entrada)].copy()
 
+
+    def _gerar_msg_erro_sintaxe(self, topo_pilha, token):
+
+        # pegando mensagem com base no token não reconhecido e o que deveria ser escrito
+        # exemplo escrever 'prog' em vez de 'program'
+        if topo_pilha >= self.c_inicio_nao_terminal:
+            parse = self.c_tabela_parse[topo_pilha - self.c_inicio_nao_terminal]
+            producao = list(x for x in parse if x > -1).copy().pop(0)
+
+            topo_pilha = self.c_producao[producao].copy().pop(0) - 1
+
+        msg = ''
+
+        # ignorando mensagem sem sentido
+        if token['token'] != '$':
+            msg = 'Não era esperado "'+token['token']+'". '
+
+        # complentando mensagem com base no que se espera de token
+        if len(self.c_msg_erro_complementar) >= topo_pilha:
+            msg = msg + self.c_msg_erro_complementar[topo_pilha] + '.'
+
+        return msg
+
     def analise(self, tokens: list):
 
         tokens.append(self.ct_fim_sentenca)
@@ -31,10 +54,12 @@ class AnalisadorSintatico(Analisador):
             # pegando ultimo elemento do array
             topo_pilha = self.pilha[-1]
 
+            if topo_pilha == self.ct_vazio:
+                del self.pilha[-1]
+                continue
+
             # token de entrada atual
             token = tokens[0]
-
-            print('topo: ', topo_pilha, 'token: ', token)
 
             # se topo é terminal ou $
             if topo_pilha < self.c_inicio_nao_terminal:
@@ -47,12 +72,9 @@ class AnalisadorSintatico(Analisador):
 
                     # removendo primeiro item dos tokens
                     tokens.pop(0)
-                    print('removendo tokens', tokens)
                 else:
-                    print("================== ERRO")
-                    print(self.pilha)
-                    print(topo_pilha, token['codigo'])
-                    raise Exception('Erro 1')
+                    print('Erro 1')
+                    raise Exception(self._gerar_msg_erro_sintaxe(topo_pilha, token))
             else:
                 # topo não é terminal
                 if self._get_in_parse(topo_pilha, token['codigo']) > -1:
@@ -66,7 +88,8 @@ class AnalisadorSintatico(Analisador):
                     # colocando produção na pilha
                     self.pilha = self.pilha + producao
                 else:
-                    raise Exception('Erro 2')
+                    print('Erro 2')
+                    raise Exception(self._gerar_msg_erro_sintaxe(topo_pilha, token))
 
 
         print("compilado com  sucesso")

@@ -1,6 +1,9 @@
 from tkinter import *
+from tkinter import scrolledtext
 from analisador_lexico import AnalisadorLexico
-  
+from analisador_sintatico import AnalisadorSintatico
+
+
 class Application:
 
     analisador_lexico = None
@@ -12,12 +15,22 @@ class Application:
 
     items_result = []
 
-    def __init__(self, analisador_lexico: AnalisadorLexico):
+    def selectall(self, event):
+        event.widget.tag_add("sel", "1.0", "end")
+
+    def shortcut_run(self, event):
+        self.click_analisar()
+
+    def __init__(self, analisador_lexico: AnalisadorLexico, analisador_sintatico: AnalisadorSintatico):
         self.analisador_lexico = analisador_lexico
+        self.analisador_sintatico = analisador_sintatico
 
     def start(self):
 
         self.root = Tk()
+        self.root.bind_class("Text", "<Control-a>", self.selectall)
+        self.root.bind_class("Text", "<Control-r>", self.shortcut_run)
+
         w, h = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         self.root.geometry("%dx%d+0+0" % (w, h))
 
@@ -28,7 +41,7 @@ class Application:
         container_principal["padx"] = 50
         container_principal.pack()
 
-        titulo = Label(container_principal, text="Analisador Léxico")
+        titulo = Label(container_principal, text="Compilador do Will - Linguagem LMS")
         titulo["font"] = ("Arial", "15", "bold")
         titulo.pack()
 
@@ -48,10 +61,10 @@ class Application:
 
         self.txt = self.create_textarea(container_direito)
 
-        self.btn_analise = Button(container_meio, text="Analisar >>>", fg="black", command=self.click_analisar)
+        self.btn_analise = Button(container_meio, text="Run >>>", fg="black", command=self.click_analisar)
         self.btn_analise.pack()
 
-        self.create_grid(container_esquerdo, [])
+        #self.create_grid(container_esquerdo, [])
 
         self.refresh()
 
@@ -60,21 +73,17 @@ class Application:
         self.root.update()
 
     def create_textarea(self, container):
-        scroll = Scrollbar(container)
-        textarea = Text(container, height=50, width=80)
 
-        scroll.pack(side=RIGHT, fill=Y)
-        textarea.pack(side=LEFT, fill=Y)
-        scroll.config(command=textarea.yview)
-        textarea.config(yscrollcommand=scroll.set)
+        dica = Label(container, text="Atalho: Ctrl + r -> run")
+        dica["font"] = ("Arial", "11")
+        dica.grid()
+
+        textarea = scrolledtext.ScrolledText(container, width=80, height=50, undo=True)
+        textarea.grid(column=0, row=2)
 
         return textarea
 
-    def create_grid(self, container, tokens:list):
-        # {'codigo': 19, 'token': 'dsadas', 'descricao': 'Identificador'}
-        # {'codigo': 2, 'token': '=', 'descricao': 'Sinal de Igualdade'}
-        # {'codigo': 19, 'token': 'dasdas', 'descricao': 'Identificador'}
-        self.rows = []
+    def create_grid(self, container, tokens: list):
 
         for widget in self.items_result:
             widget.destroy()
@@ -112,20 +121,19 @@ class Application:
 
     def create_grid_erro(self, container, erro):
 
-        self.rows = []
-
-        for widget in self.items_result:
-            widget.destroy()
-
-        items = []
         label = Label(container, text=erro, fg="red")
         label["font"] = ("Arial", "11")
-        label.grid(row=0, column=0)
+        label.grid(columnspan=20)
 
-        items.append(label)
+        self.items_result.append(label)
 
-        self.items_result = items
+    def create_grid_sucesso(self, container, msg):
 
+        label = Label(container, text=msg, fg="green")
+        label["font"] = ("Arial", "11")
+        label.grid(columnspan=20)
+
+        self.items_result.append(label)
 
     def click_analisar(self):
 
@@ -134,11 +142,17 @@ class Application:
         code = self.txt.get("1.0", "end-1c")
         self.analisador_lexico.add_codigo('', code)
 
+        tokens = []
+
         try:
             tokens = self.analisador_lexico.analise()
-            print(tokens)
-            print('---------------------')
             self.create_grid(self.container_esquerdo, tokens)
+        except Exception as e:
+            self.create_grid_erro(self.container_esquerdo, e)
+
+        try:
+            self.analisador_sintatico.analise(tokens)
+            self.create_grid_sucesso(self.container_esquerdo, 'Compilado com sucesso.')
         except Exception as e:
             self.create_grid_erro(self.container_esquerdo, e)
 

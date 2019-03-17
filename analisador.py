@@ -32,7 +32,21 @@ class Analisador:
         [0]
     ]
 
-
+    c_msg_erro_complementar = [
+        "Erro vazio???",
+        "Era esperado fim de programa",
+        "Era esperado \"(\"",
+        "Era esperado \")\"",
+        "Era esperado \";\"",
+        "Era esperado \"end.\""
+        "Era esperado identificador",
+        "Era esperado num",
+        "Era esperado 'program'",
+        "Era esperado 'begin'",
+        "Era esperado 'end'",
+        "Era esperado 'readln'",
+        "Era esperado 'writeln'",
+    ]
 
 
 
