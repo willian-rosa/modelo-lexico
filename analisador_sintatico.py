@@ -23,7 +23,7 @@ class AnalisadorSintatico(Analisador):
             parse = self.c_tabela_parse[topo_pilha - self.c_inicio_nao_terminal]
             producao = list(x for x in parse if x > -1).copy().pop(0)
 
-            topo_pilha = self.c_producao[producao].copy().pop(0) - 1
+            topo_pilha = self.c_producao[producao].copy().pop(0)
 
         msg = ''
 
@@ -32,7 +32,8 @@ class AnalisadorSintatico(Analisador):
             msg = 'Não era esperado "'+token['token']+'". '
 
         # complentando mensagem com base no que se espera de token
-        if len(self.c_msg_erro_complementar) >= topo_pilha:
+        # between entre 0 e max de mensagens
+        if 0 < topo_pilha < len(self.c_msg_erro_complementar):
             msg = msg + self.c_msg_erro_complementar[topo_pilha] + '.'
 
         return msg
@@ -73,7 +74,6 @@ class AnalisadorSintatico(Analisador):
                     # removendo primeiro item dos tokens
                     tokens.pop(0)
                 else:
-                    print('Erro 1')
                     raise Exception(self._gerar_msg_erro_sintaxe(topo_pilha, token))
             else:
                 # topo não é terminal
@@ -88,7 +88,6 @@ class AnalisadorSintatico(Analisador):
                     # colocando produção na pilha
                     self.pilha = self.pilha + producao
                 else:
-                    print('Erro 2')
                     raise Exception(self._gerar_msg_erro_sintaxe(topo_pilha, token))
 
 

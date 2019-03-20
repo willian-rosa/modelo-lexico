@@ -88,15 +88,15 @@ class AnalisadorLexico(Analisador):
             self.estado = self.ESTADO_INTEIRO
             self.coletor = caracter
         elif caracter == '+':
-            self.add_token(2, caracter, 'Sinal de Adição')
+            self.add_token(self.ct_adicao, caracter, 'Sinal de Adição')
         elif caracter == '-':
-            self.add_token(2, caracter, 'Sinal de Subtração')
+            self.add_token(self.ct_subtracao, caracter, 'Sinal de Subtração')
         elif caracter == '*':
-            self.add_token(2, caracter, 'Sinal de Multiplicação')
+            self.add_token(self.ct_multiplicacao, caracter, 'Sinal de Multiplicação')
         elif caracter == '/':
-            self.add_token(2, caracter, 'Sinal de Divisão')
+            self.add_token(self.ct_divisao, caracter, 'Sinal de Divisão')
         elif caracter == '=':
-            self.add_token(2, caracter, 'Sinal de Igualdade')
+            self.add_token(self.ct_igualdade, caracter, 'Sinal de Igualdade')
         elif caracter == '>':
             self.estado = self.ESTADO_SINAL_MAIOR
         elif caracter == '<':
@@ -106,7 +106,7 @@ class AnalisadorLexico(Analisador):
         elif caracter == ';':
             self.add_token(self.ct_ponto_virgula, caracter, 'Sinal de Ponto e Virgula')
         elif caracter == ',':
-            self.add_token(15, caracter, 'Sinal de Virgula')
+            self.add_token(self.ct_virgula, caracter, 'Sinal de Virgula')
         elif caracter == '.':
             self.add_token(self.ct_ponto, caracter, 'Sinal de Ponto')
         elif caracter == '(':
@@ -131,7 +131,7 @@ class AnalisadorLexico(Analisador):
                 if len(self.coletor) > 255:
                     self.add_error('Literal excedeu 255 caracteres.', arquivo)
                 else:
-                    self.add_token(21, self.coletor, 'Literal')
+                    self.add_token(self.ct_literal, self.coletor, 'Literal')
             else:
                 self.coletor = self.coletor + caracter
 
@@ -175,31 +175,31 @@ class AnalisadorLexico(Analisador):
                 self._analise_caracter(arquivo, caracter)
         elif self.estado == self.ESTADO_SINAL_MAIOR:
             if caracter == '=':
-                self.add_token(8, '>=', 'Sinal de Maior/Igual')
+                self.add_token(self.ct_sinal_maior_igual, '>=', 'Sinal de Maior/Igual')
                 self.estado = self.ESTADO_INICIAL
             else:
-                self.add_token(7, '>', 'Sinal de Maior')
+                self.add_token(self.ct_sinal_maior, '>', 'Sinal de Maior')
                 self.estado = self.ESTADO_INICIAL
                 self._analise_caracter(arquivo, caracter)
 
         elif self.estado == self.ESTADO_SINAL_MENOR:
             if caracter == '=':
-                self.add_token(10, '<=', 'Sinal de Menor/Igual')
+                self.add_token(self.ct_sinal_menor_igual, '<=', 'Sinal de Menor/Igual')
                 self.estado = self.ESTADO_INICIAL
             elif caracter == '>':
-                self.add_token(11, '<>', 'Sinal de Diferente')
+                self.add_token(self.ct_sinal_diferente, '<>', 'Sinal de Diferente')
                 self.estado = self.ESTADO_INICIAL
             else:
-                self.add_token(9, '<', 'Sinal de Menor')
+                self.add_token(self.ct_sinal_menor, '<', 'Sinal de Menor')
                 self.estado = self.ESTADO_INICIAL
                 self._analise_caracter(arquivo, caracter)
 
         elif self.estado == self.ESTADO_SINAL_DOIS_PONTOS:
             if caracter == '=':
-                self.add_token(12, ':=', 'Sinal de Atribuição')
+                self.add_token(self.ct_atribuicao, ':=', 'Sinal de Atribuição')
                 self.estado = self.ESTADO_INICIAL
             else:
-                self.add_token(13, ':', 'Sinal dois pontos')
+                self.add_token(self.ct_dois_pontos, ':', 'Sinal dois pontos')
                 self.estado = self.ESTADO_INICIAL
                 self._analise_caracter(arquivo, caracter)
 
@@ -209,6 +209,7 @@ class AnalisadorLexico(Analisador):
             else:
                 self.add_token(self.ct_abre_par, '(', 'Sinal Abre Parêntese')
                 self.estado = self.ESTADO_INICIAL
+                self._analise_caracter(arquivo, caracter)
 
         elif self.estado == self.ESTADO_COMENTARIO and caracter == '*':
             self.estado = self.ESTADO_COMENTARIO_FECHANDO
@@ -218,10 +219,6 @@ class AnalisadorLexico(Analisador):
                 self.estado = self.ESTADO_INICIAL
             elif caracter != '*':
                 self.estado = self.ESTADO_COMENTARIO
-
-
-
-
 
     def add_token(self, codigo_token, valor, descricao):
         self.tabela_tokens.append({
@@ -238,50 +235,50 @@ class AnalisadorLexico(Analisador):
         if coletor == 'program':
             return self.ct_program
         elif coletor == 'const':
-            return 23
+            return self.ct_const
         elif coletor == 'var':
-            return 24
+            return self.ct_var
         elif coletor == 'procedure':
-            return 25
+            return self.ct_procedure
         elif coletor == 'begin':
             return self.ct_begin
         elif coletor == 'end':
             return self.ct_end
         elif coletor == 'integer':
-            return 28
+            return self.ct_integer
         elif coletor == 'of':
-            return 29
+            return self.ct_of
         elif coletor == 'call':
-            return 30
+            return self.ct_call
         elif coletor == 'if':
-            return 31
+            return self.ct_if
         elif coletor == 'then':
-            return 32
+            return self.ct_then
         elif coletor == 'else':
-            return 33
+            return self.ct_else
         elif coletor == 'while':
-            return 34
+            return self.ct_while
         elif coletor == 'do':
-            return 35
+            return self.ct_do
         elif coletor == 'repeat':
-            return 36
+            return self.ct_repeat
         elif coletor == 'until':
-            return 37
+            return self.ct_until
         elif coletor == 'readln':
             return self.ct_readln
         elif coletor == 'writeln':
             return self.ct_writeln
         elif coletor == 'or':
-            return 40
+            return self.ct_or
         elif coletor == 'and':
-            return 41
+            return self.ct_and
         elif coletor == 'not':
-            return 42
+            return self.ct_not
         elif coletor == 'for':
-            return 43
+            return self.ct_for
         elif coletor == 'to':
-            return 44
+            return self.ct_to
         elif coletor == 'case':
-            return 45
+            return self.ct_case
         else:
             return None
