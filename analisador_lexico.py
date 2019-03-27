@@ -16,7 +16,7 @@ class AnalisadorLexico(Analisador):
     ESTADO_COMENTARIO_FECHANDO = 'comentario_fechando'
 
     letras = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-              'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v+', 'w', 'x', 'y', 'z',
+              'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
               'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
               'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
@@ -228,7 +228,7 @@ class AnalisadorLexico(Analisador):
         })
 
     def add_error(self, msg, arquivo):
-        raise Exception('ERRO FATAL: '+msg + ' Arquivo: ' + arquivo + ' - Linha: ' + str(self.linha) + ':' + str(self.coluna))
+        raise Exception('[ERRO LEXICO]: '+msg + ' Arquivo: ' + arquivo + ' - Linha: ' + str(self.linha) + ':' + str(self.coluna))
 
     def verifica_coletor_palavras_reservadas(self):
         coletor = self.coletor.lower()

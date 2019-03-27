@@ -74,7 +74,7 @@ class AnalisadorSintatico(Analisador):
                     # removendo primeiro item dos tokens
                     tokens.pop(0)
                 else:
-                    raise Exception(self._gerar_msg_erro_sintaxe(topo_pilha, token))
+                    raise Exception('[ERRO SINTATICO]: '+self._gerar_msg_erro_sintaxe(topo_pilha, token))
             else:
                 # topo não é terminal
                 if self._get_in_parse(topo_pilha, token['codigo']) > -1:
@@ -87,8 +87,9 @@ class AnalisadorSintatico(Analisador):
 
                     # colocando produção na pilha
                     self.pilha = self.pilha + producao
+
                 else:
-                    raise Exception(self._gerar_msg_erro_sintaxe(topo_pilha, token))
+                    raise Exception('[ERRO SINTATICO]: '+self._gerar_msg_erro_sintaxe(topo_pilha, token))
 
 
         print("compilado com  sucesso")

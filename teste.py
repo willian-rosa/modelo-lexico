@@ -5,15 +5,11 @@ from analisador_sintatico import AnalisadorSintatico
 alexico = AnalisadorLexico()
 asintatico = AnalisadorSintatico()
 
-code = 'PROGRAM testeOperacoesMatematica; \
-            VAR x, y, z :integer; \
-        BEGIN \
-            z:=1; \
-            y:= 10; \
-            READLN(x); \
-            z:= (10+z+x) * y; \
-            WRITELN(z); \
-        END.'
+code = 'program \
+	vAA a:integer \
+begin \
+a++ \
+end.'
 
 alexico.clear()
 

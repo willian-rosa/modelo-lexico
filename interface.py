@@ -41,7 +41,7 @@ class Application:
         container_principal["padx"] = 50
         container_principal.pack()
 
-        titulo = Label(container_principal, text="Compilador do Will - Linguagem LMS")
+        titulo = Label(container_principal, text="Compilador - Linguagem LMS")
         titulo["font"] = ("Arial", "15", "bold")
         titulo.pack()
 
@@ -85,9 +85,6 @@ class Application:
 
     def create_grid(self, container, tokens: list):
 
-        for widget in self.items_result:
-            widget.destroy()
-
         items = []
         label = Label(container, text="Código")
         label["font"] = ("Arial", "11")
@@ -107,17 +104,52 @@ class Application:
 
         items.append(label)
 
+        # Create a frame for the canvas with non-zero row&column weights
+        frame_canvas = Frame(container)
+        frame_canvas.grid(row=2, column=0, columnspan=3)
+        frame_canvas.grid_rowconfigure(0, weight=1)
+        frame_canvas.grid_columnconfigure(0, weight=1)
+        # Set grid_propagate to False to allow 5-by-5 buttons resizing later
+        frame_canvas.grid_propagate(False)
+
+        # Add a canvas in that frame
+        canvas = Canvas(frame_canvas, bg="yellow")
+        canvas.grid(row=0, column=0, sticky="news")
+
+        # Link a scrollbar to the canvas
+        vsb = Scrollbar(frame_canvas, orient="vertical", command=canvas.yview)
+        vsb.grid(row=0, column=1, sticky='ns')
+        canvas.configure(yscrollcommand=vsb.set)
+
+        # Create a frame to contain the buttons
+        frame_buttons = Frame(canvas, bg="blue")
+        canvas.create_window((0, 0), window=frame_buttons, anchor='nw')
+
+        tabela_tokens = [[Entry() for j in range(3)] for i in enumerate(tokens)]
+
         for i, token in enumerate(tokens):
 
             r = i + 1
 
             for j, valor in enumerate(token):  # Columns
-                b = Entry(container)
+                b = Entry(frame_buttons)
                 b.insert(0, token[valor])
                 items.append(b)
-                b.grid(row=r, column=j)
+                b.grid(row=r, column=j, sticky='news')
+                tabela_tokens[i][j] = b
 
-        self.items_result = items
+        # Update buttons frames idle tasks to let tkinter calculate buttons sizes
+        frame_buttons.update_idletasks()
+
+        # Resize the canvas frame to show exactly 5-by-5 buttons and the scrollbar
+        first5columns_width = sum([tabela_tokens[0][j].winfo_width() for j in range(0, 3)])
+        first5rows_height = sum([tabela_tokens[i][0].winfo_height() for i in range(0, 30)])
+        frame_canvas.config(width=first5columns_width + vsb.winfo_width(), height=first5rows_height)
+
+        # Set the canvas scrolling region
+        canvas.config(scrollregion=canvas.bbox("all"))
+
+        self.items_result.append(frame_canvas)
 
     def create_grid_erro(self, container, erro):
 
@@ -139,6 +171,10 @@ class Application:
 
         self.analisador_lexico.clear()
 
+
+        for widget in self.items_result:
+            widget.destroy()
+
         code = self.txt.get("1.0", "end-1c")
         self.analisador_lexico.add_codigo('', code)
 
@@ -146,15 +182,18 @@ class Application:
 
         try:
             tokens = self.analisador_lexico.analise()
-            self.create_grid(self.container_esquerdo, tokens)
-        except Exception as e:
-            self.create_grid_erro(self.container_esquerdo, e)
 
-        try:
+            if tokens != None:
+                for i in tokens:
+                    print(i)
+                print('======================================')
+
             self.analisador_sintatico.analise(tokens)
             self.create_grid_sucesso(self.container_esquerdo, 'Compilado com sucesso.')
         except Exception as e:
             self.create_grid_erro(self.container_esquerdo, e)
+
+
 
 
 
