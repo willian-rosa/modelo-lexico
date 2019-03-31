@@ -36,6 +36,9 @@ class AnalisadorSintatico(Analisador):
         if 0 < topo_pilha < len(self.c_msg_erro_complementar):
             msg = msg + self.c_msg_erro_complementar[topo_pilha] + '.'
 
+        # colocando informação de linha e coluna do token com erro
+        msg = msg + ' Na linha ' + str(token['linha']) + ":" + str(token['coluna'])
+
         return msg
 
     def analise(self, tokens: list):

@@ -224,7 +224,9 @@ class AnalisadorLexico(Analisador):
         self.tabela_tokens.append({
             'codigo': codigo_token,
             'token': valor,
-            'descricao': descricao
+            'descricao': descricao,
+            'linha': self.linha,
+            'coluna': self.coluna,
         })
 
     def add_error(self, msg, arquivo):
