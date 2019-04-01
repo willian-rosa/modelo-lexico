@@ -27,7 +27,6 @@ class AnalisadorSintatico(Analisador):
             topo_pilha = self.c_producao[producao].copy().pop(0)
 
         msg = ''
-        #TODO implementar reconhecimento de linha quando der erro sintático.
         # ignorando mensagem sem sentido
         if token['token'] != '$':
             msg = 'Não era esperado "'+token['token']+'". ' 
