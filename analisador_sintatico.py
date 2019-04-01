@@ -1,4 +1,5 @@
 from analisador import Analisador
+from analisador_lexico import AnalisadorLexico
 
 class AnalisadorSintatico(Analisador):
 
@@ -26,10 +27,9 @@ class AnalisadorSintatico(Analisador):
             topo_pilha = self.c_producao[producao].copy().pop(0)
 
         msg = ''
-
         # ignorando mensagem sem sentido
         if token['token'] != '$':
-            msg = 'Não era esperado "'+token['token']+'". '
+            msg = 'Não era esperado "'+token['token']+'". ' 
 
         # complentando mensagem com base no que se espera de token
         # between entre 0 e max de mensagens

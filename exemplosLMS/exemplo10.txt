@@ -1,0 +1,16 @@
+# Estado civil
+program civil;
+    var opt:integer;
+begin
+    writeln("Esolha sua estado");
+    writeln("[1]Solteiro - [2]Casado - [3]Divorciado - [4]Amasiado");
+    readln(opt);
+    if opt = 1 then
+        writeln("Você é solteiro.");
+    if opt = 2 then
+        writeln("Você é casado.");
+    if opt = 3 then
+        writeln("Você é divorciado.");
+    if opt = 4 then
+        writeln("Você é amasiado.");
+end.

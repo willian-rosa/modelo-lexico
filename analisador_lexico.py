@@ -230,7 +230,7 @@ class AnalisadorLexico(Analisador):
         })
 
     def add_error(self, msg, arquivo):
-        raise Exception('[ERRO LEXICO]: '+msg + ' Arquivo: ' + arquivo + ' - Linha: ' + str(self.linha) + ':' + str(self.coluna))
+        raise Exception('ERRO FATAL: '+msg + ' Arquivo: ' + arquivo + ' - Linha: ' + str(self.linha) + ':' + str(self.coluna))
 
     def verifica_coletor_palavras_reservadas(self):
         coletor = self.coletor.lower()
