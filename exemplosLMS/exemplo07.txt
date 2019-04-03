@@ -1,9 +1,0 @@
-# Divide por 10.
-program opera;
-    var a,d:integer;
-begin
-    writeln("Digite um valor entre 0 e 999: ");
-    readln(a);
-    d:=a/10;
-    writeln(d);
-end.

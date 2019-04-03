@@ -1,0 +1,18 @@
+(*
+# Estado civil
+*)
+PROGRAM CIVIL;
+    VAR OPT:INTEGER;
+BEGIN
+    WRITELN("ESOLHA SUA ESTADO");
+    WRITELN("[1]SOLTEIRO - [2]CASADO - [3]DIVORCIADO - [4]AMASIADO");
+    READLN(OPT);
+    IF OPT = 1 THEN
+        WRITELN("VOCÊ É SOLTEIRO.");
+    IF OPT = 2 THEN
+        WRITELN("VOCÊ É CASADO.");
+    IF OPT = 3 THEN
+        WRITELN("VOCÊ É DIVORCIADO.");
+    IF OPT = 4 THEN
+        WRITELN("VOCÊ É AMASIADO.");
+END.

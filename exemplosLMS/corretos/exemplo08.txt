@@ -1,0 +1,13 @@
+(*
+# Checa a idade
+*)
+PROGRAM IDADE;
+    VAR I:INTEGER;
+BEGIN 
+    WRITELN("DIGITE SUA IDADE: ");
+    READLN(I);
+    IF I < 18 THEN
+        WRITELN("MENOR DE IDADE!")
+    ELSE
+        WRITELN("MAIOR DE IDADE!");
+END.

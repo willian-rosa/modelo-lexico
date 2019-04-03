@@ -1,0 +1,18 @@
+(*
+# Erro no declarar variavel, deveria ter colocado ':' em vez de ':='
+#
+# troca de valores
+*)
+PROGRAM TROCA ;
+    VAR V1,V2,V3:=INTEGER;
+BEGIN
+    WRITELN("DIGITE O PRIMEIRO VALOR: ");
+    READLN(V1);
+    WRITELN("DIGITE O SEGUNDO VALOR: ");
+    READLN(V2);
+    V3:=V1;
+    V1:=V2;
+    V2:=V3;
+    WRITELN(V1);
+    WRITELN(V2);
+END.

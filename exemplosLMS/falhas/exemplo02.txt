@@ -1,0 +1,15 @@
+(*
+# não colocando ';' no final das linhas
+*)
+PROGRAM EXEMPLO02 ;
+    VAR SAL: INTEGER;
+BEGIN
+    WRITELN("DIGITE O SALÁRIO MENSAL DO FUNCIONÁRIO EM R$: ");
+    SAL := INPUT ;
+    IF SAL > 1250 THEN
+        SAL := SAL + (SAL * (10 / 100))
+        WRITELN (SAL)
+    ELSE 
+        SAL := SAL + (SAL * (15 / 100))
+    WRITELN (SAL)
+END.

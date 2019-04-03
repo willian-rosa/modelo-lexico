@@ -1,9 +1,0 @@
-# Um programa que conta até 100 utilizando repeat 
-program Conta100 ;
-    var cont:integer;
-begin
-    cont := 0 ;
-    repeat
-        cont := cont + 1 
-    until cont = 100 ;
-end.

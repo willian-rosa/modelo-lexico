@@ -1,0 +1,11 @@
+(*
+# Um programa que conta até 100 utilizando repeat 
+*)
+PROGRAM CONTA100 ;
+    VAR CONT:INTEGER;
+BEGIN
+    CONT := 0 ;
+    REPEAT
+        CONT := CONT + 1 
+    UNTIL CONT = 100 ;
+END.

@@ -1,0 +1,17 @@
+(*
+# Não colocando o sinal ';' na declaração do nome do program
+#
+# Média de notas
+*)
+PROGRAM MEDIA
+    VAR N1,N2,N3, MEDIA:INTEGER;
+BEGIN
+    WRITELN("DIGITE A PRIMEIRA NOTA: ");
+    READLN(N1);
+    WRITELN("DIGITE A SEGUNDA NOTA: ");
+    READLN(N2);
+    WRITELN("DIGITE A TERCEIRA NOTA: ");
+    READLN(N3);
+    MEDIA:= (N1 + N2+ N3)/3;
+    WRITELN(MEDIA);
+END.

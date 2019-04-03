@@ -1,9 +1,0 @@
-# Um programa que conte até 10 utilizando while.
-program contador;
-    var cont: integer;
-begin
-    cont := 0;
-    while cont > 10 do 
-        writeln cont ;
-        cont := cont + 1;
-    end.

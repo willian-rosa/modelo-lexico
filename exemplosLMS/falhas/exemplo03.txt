@@ -1,0 +1,13 @@
+(*
+# Não colocando parenteses depois do WHILE e WRITELN.
+#
+# Um programa que conte até 10 utilizando while.
+*)
+PROGRAM CONTADOR;
+    VAR CONT: INTEGER;
+BEGIN
+    CONT := 0;
+    WHILE CONT > 10 DO 
+        WRITELN CONT ;
+        CONT := CONT + 1;
+END.

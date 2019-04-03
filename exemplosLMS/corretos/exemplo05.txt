@@ -1,0 +1,32 @@
+(*
+# Procedure
+*)
+PROGRAM PRO ;
+    CONST A = 2;
+    VAR Q,W:INTEGER;
+
+    PROCEDURE E;
+        VAR R:INTEGER ;
+
+    PROCEDURE T;
+        VAR Y: INTEGER;
+        BEGIN
+            R:=R-100;
+            Y:=R*A;
+            IF Y > 100 THEN CALL T 
+            ELSE WRITELN(Y)
+        END;
+    BEGIN
+        R:= Q+W*A;
+        IF R>100 THEN CALL T
+        ELSE WRITELN(R);
+    END;
+
+    BEGIN
+        READLN(Q,W);
+        IF Q > 100 THEN Q := 1100
+        ELSE Q:= W+100;
+        WHILE Q>W DO BEGIN CALL E;
+        READLN(Q,W) END;
+        WRITELN("OK!");
+    END.

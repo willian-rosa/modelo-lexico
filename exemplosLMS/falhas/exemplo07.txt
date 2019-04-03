@@ -1,0 +1,13 @@
+(*
+# Esquecendo de colocar o sinal de multiplicação
+#
+# multiplicando por 2.
+*)
+PROGRAM OPERA;
+    VAR A,D:INTEGER;
+BEGIN
+    WRITELN("DIGITE UM VALOR ENTRE 0 E 999: ");
+    READLN(A);
+    D:= 2 A;
+    WRITELN(D);
+END.
