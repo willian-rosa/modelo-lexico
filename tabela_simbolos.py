@@ -35,8 +35,6 @@ class TabelaSimbolos:
 
         return index % 50
 
-
-
     def _horner(self, chars):
 
         polinomio = 37
