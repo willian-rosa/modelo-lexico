@@ -1,8 +1,19 @@
 from tabela_simbolos import TabelaSimbolos
+from item_tabela_simbolo import ItemTabelaSimbolo
 
 
 ts = TabelaSimbolos()
+its1 = ItemTabelaSimbolo()
+its1.nome = 'casa'
 
-a = ts._convert_word_in_hash('casa')
 
-print(a)
+ts.add(its1)
+
+its2 = ItemTabelaSimbolo()
+its2.nome = 'casa2'
+ts.add(its2)
+
+
+
+aa = ts.remove(its2)
+print(aa)
