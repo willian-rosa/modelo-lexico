@@ -3,17 +3,24 @@ from item_tabela_simbolo import ItemTabelaSimbolo
 
 
 ts = TabelaSimbolos()
-its1 = ItemTabelaSimbolo()
-its1.nome = 'casa'
+
+nome = 'v103'
+hash = ts._convert_word_in_hash(nome)
+i = ts._convert_word_in_index(hash)
+print(nome, i, hash)
+
+nome = 'v108'
+hash = ts._convert_word_in_hash(nome)
+i = ts._convert_word_in_index(hash)
+print(nome, i, hash)
+
+nome = 'v109'
+hash = ts._convert_word_in_hash(nome)
+i = ts._convert_word_in_index(hash)
+print(nome, i, hash)
 
 
-ts.add(its1)
-
-its2 = ItemTabelaSimbolo()
-its2.nome = 'casa2'
-ts.add(its2)
-
-
-
-aa = ts.remove(its2)
-print(aa)
+nome = 'v110'
+hash = ts._convert_word_in_hash(nome)
+i = ts._convert_word_in_index(hash)
+print(nome, i, hash)
