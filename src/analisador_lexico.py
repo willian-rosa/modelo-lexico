@@ -1,4 +1,4 @@
-from analisador import Analisador
+from src.analisador import Analisador
 
 
 class AnalisadorLexico(Analisador):

@@ -1,8 +1,8 @@
-from analisador_lexico import AnalisadorLexico
-from analisador_sintatico import AnalisadorSintatico
+from src.analisador_lexico import AnalisadorLexico
+from src.analisador_sintatico import AnalisadorSintatico
 import glob
 import time
-from interface import Application
+from src.interface import Application
 
 
 al = AnalisadorLexico()

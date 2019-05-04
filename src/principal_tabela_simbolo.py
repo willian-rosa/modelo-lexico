@@ -1,5 +1,5 @@
-from tabela_simbolos import TabelaSimbolos
-from item_tabela_simbolo import ItemTabelaSimbolo
+from src.tabela_simbolos import TabelaSimbolos
+from src.item_tabela_simbolo import ItemTabelaSimbolo
 
 class PrincipalTabelaSimbolo:
 

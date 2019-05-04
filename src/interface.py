@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import scrolledtext
-from analisador_lexico import AnalisadorLexico
-from analisador_sintatico import AnalisadorSintatico
+from src.analisador_lexico import AnalisadorLexico
+from src.analisador_sintatico import AnalisadorSintatico
 
 
 class Application:

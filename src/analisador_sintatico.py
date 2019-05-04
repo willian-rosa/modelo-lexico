@@ -1,5 +1,5 @@
-from analisador import Analisador
-from analisador_lexico import AnalisadorLexico
+from src.analisador import Analisador
+from src.analisador_lexico import AnalisadorLexico
 
 class AnalisadorSintatico(Analisador):
 

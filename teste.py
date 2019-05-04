@@ -1,14 +1,14 @@
-from analisador_lexico import AnalisadorLexico
-from analisador_sintatico import AnalisadorSintatico
+from src.analisador_lexico import AnalisadorLexico
+from src.analisador_sintatico import AnalisadorSintatico
 
 
 alexico = AnalisadorLexico()
 asintatico = AnalisadorSintatico()
 
-code = 'program \
-	vAA a:integer \
+code = 'program classe; \
+	var a:integer; \
 begin \
-a++ \
+a := 2; \
 end.'
 
 alexico.clear()

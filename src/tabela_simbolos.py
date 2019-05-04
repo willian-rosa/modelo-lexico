@@ -1,4 +1,4 @@
-from item_tabela_simbolo import ItemTabelaSimbolo
+from src.item_tabela_simbolo import ItemTabelaSimbolo
 
 class TabelaSimbolos:
 
