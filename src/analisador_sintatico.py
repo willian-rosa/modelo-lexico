@@ -5,6 +5,7 @@ class AnalisadorSintatico(Analisador):
 
     pilha = []
 
+    # pega item na tabela de parse
     def _get_in_parse(self, topo_pilha, codigo_token_entrada):
 
         producao = topo_pilha - self.c_inicio_nao_terminal
@@ -66,6 +67,7 @@ class AnalisadorSintatico(Analisador):
             token = tokens[0]
 
             # se topo é terminal ou $
+            # caso o token é menor que 46
             if topo_pilha < self.c_inicio_nao_terminal:
 
                 # vefificando se é o token esperado
@@ -78,7 +80,11 @@ class AnalisadorSintatico(Analisador):
                     tokens.pop(0)
                 else:
                     raise Exception('[ERRO SINTATICO]: '+self._gerar_msg_erro_sintaxe(topo_pilha, token))
-            else:
+
+            # vai executar se p token atual é uma regra de produção, ou seja o token esta entre [46 e 77[
+            # 77 esta fora pq já é uma ação semantica
+            elif self.c_inicio_nao_terminal <= topo_pilha < self.c_inicio_acoes_semantica:
+
                 # topo não é terminal
                 if self._get_in_parse(topo_pilha, token['codigo']) > -1:
                     producao = self._get_in_producao(topo_pilha, token['codigo'])
@@ -92,7 +98,11 @@ class AnalisadorSintatico(Analisador):
                     self.pilha = self.pilha + producao
 
                 else:
-                    raise Exception('[ERRO SINTATICO]: '+self._gerar_msg_erro_sintaxe(topo_pilha, token))
+                    raise Exception('[ERRO SINTATICO]: ' + self._gerar_msg_erro_sintaxe(topo_pilha, token))
+
+            else:
+
+                raise Exception('[ERRO SEMANTICO]: ')
 
 
         print("compilado com  sucesso")

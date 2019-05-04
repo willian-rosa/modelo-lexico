@@ -1,0 +1,55 @@
+Trbalho final
+x - Colocar ações semanatica no gals
+ - Criar classe de “AnalisadorSemantico” (onde fica a programação das ações semantica)
+ - alterar o analizador sintatico para chamar o Analizador Semantico
+ - Criar inicialização de pilhas ()
+
+
+
+- programar a maquina hipotetica
+
+
+
+
+
+
+
+
+
+
+
+
+-------
+Classe Máquina – gerenciamento da máquina hipotética, com os seguintes métodos:
+- inicializaAreaIntrucoes  inicializa área de instruções
+- inicializaAreaLiterais  inicializa área de literais- incluiAreaInstrucao  inclui instrução na área de instruções
+- alteraAreaInstrucao  altera determinada instrução na área de instruções
+- incluiAreaLiterais  inclui literal na área de literais
+- interpreta
+
+Classe TS - gerenciamento da Tabela de Símbolos, com os seguintes métodos:
+- inicializaTs  inicializa a tabela de símbolos
+- busca  busca nome na TS – se estiver devolve a sua posição na TS
+- insere  busca nome na TS – se identificador está na tabela e já foi declarado no nível, então indica erro; senão insere.
+- remove  deleta nomes de determinado nível da TS. Garante a alocação dinâmica de nomes na tabela – é
+acionada quando o compilador termina a compilação de um bloco.
+
+Classe Sintático – gerenciamento da análise sintática comandando a semântica e geração de código, com os seguintes métodos:
+- inicializaMatrizParsing
+- inicializaRegrasProducao
+- analiseSintatica
+- trataAcao (faz verificações de ordem semântica e comanda a geração de código)
+
+
+------------------------
+#100 : Reconhecendo o nome do programa.
+	Inicializa pilhas (ifs, while, repeat, procedures, case, for) –
+	Inicializa tabela de símbolos (vetor tab_hash e a própria tabela tab_simb) –
+	Inicializa área de instruções da máquina hipotética
+	Inicializa área de literais da máquina hipotética
+	Inicializa algumas variáveis :
+		nível_atual:=0 ( faz o controle do nível atual),
+		Pt_livre:=1 , (aponta para a próxima posição livre da tabela de símbolos)
+		escopo[0]:=1 (usada juntamente com Tabela de símbolos) ,
+		Observa-se que estas três variáveis, dependendo da implementação, podem ser inicializadas na Classe TS.
+		número de variáveis nv :=0 (número de variáveis num bloco)
