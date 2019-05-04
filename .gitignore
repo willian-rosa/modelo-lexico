@@ -107,3 +107,5 @@ venv.bak/
 /code
 /.idea
 /modelo-lexico
+__pycache__
+.idea/
