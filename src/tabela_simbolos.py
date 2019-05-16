@@ -39,8 +39,11 @@ class TabelaSimbolos:
         else:
             self._items[i] = item
 
+        return item
+
     """
     Buscando o item pelo nome do item
+    :return ItemTabelaSimbolo
     """
     def find(self, nome):
 

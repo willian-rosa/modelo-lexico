@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import scrolledtext
 from src.analisador_lexico import AnalisadorLexico
 from src.analisador_sintatico import AnalisadorSintatico
+from src.gerador_codigo_intermediario import GeradorCodigoIntermediario
 
 
 class Application:
@@ -178,8 +179,6 @@ class Application:
         code = self.txt.get("1.0", "end-1c")
         self.analisador_lexico.add_codigo('', code)
 
-        tokens = []
-
         try:
             tokens = self.analisador_lexico.analise()
 
@@ -188,7 +187,9 @@ class Application:
                     print(i)
                 print('======================================')
 
-            self.analisador_sintatico.analise(tokens)
+            gerador = GeradorCodigoIntermediario()
+
+            self.analisador_sintatico.analise(tokens, gerador)
             self.create_grid_sucesso(self.container_esquerdo, 'Compilado com sucesso.')
         except Exception as e:
             self.create_grid_erro(self.container_esquerdo, e)

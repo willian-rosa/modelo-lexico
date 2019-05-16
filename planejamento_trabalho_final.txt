@@ -1,13 +1,23 @@
 Trbalho final
 x - Colocar ações semanatica no gals
- - Criar classe de “AnalisadorSemantico” (onde fica a programação das ações semantica)
- - alterar o analizador sintatico para chamar o Analizador Semantico
+x - Criar classe de “AnalisadorSemantico” (onde fica a programação das ações semantica)
+x - alterar o analizador sintatico para chamar o Analizador Semantico
+ - Criar as ações semanticas
  - Criar inicialização de pilhas ()
 
 
+validar a diferença de nível da regra 129
+validar a diferença de nível da regra 105
+
+
+
+fazer teste atribuindo valor em procedure
+fazer teste chamndo variavel inexistente
+esta sendo possivel ultilizar uma variavel em writeln, mesmo que ela não tenha valor
+[ERRO] na ação 104 não estou buscando por nibel, portanto vai dar erro quando declarar variavel na procedure com o mesmo nome
+[ERRO] quando coloco ';' no while do
 
 - programar a maquina hipotetica
-
 
 
 
