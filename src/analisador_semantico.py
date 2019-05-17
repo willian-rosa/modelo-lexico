@@ -143,6 +143,7 @@ class AnalisadorSemantico:
         self._pilha_fors = []
         self._pilha_repeats = []
         self._pilha_strings = []
+        self._pilha_case = []
 
         # controle de pilha
         self._ponteiro_string = -1
@@ -347,27 +348,50 @@ class AnalisadorSemantico:
         #raise Exception('Falta desenvolver')  # TODO Falta desenvolver
 
     def _acao_semantica_133(self):
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+
+        while len(self._pilha_case) > 0:
+            self._pilha_case[-1]['operador2'] = self._cod_intermediario.getLc()
+            del self._pilha_case[-1]
+
+        self._cod_intermediario.add(self._cod_intermediario.AMEM, '-', -1)
+
+
+
 
     def _acao_semantica_134(self, token):
 
         self._cod_intermediario.add(self._cod_intermediario.COPI, '-', '-')
+        self._cod_intermediario.add(self._cod_intermediario.CRCT, '-', token['token'])
+        self._cod_intermediario.add(self._cod_intermediario.CMIG, '-', '-')
 
-        self._cod_intermediario.print()
-        print(token)
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+        if self._pilha_case[-1] and self._pilha_case[-1]['codigo'] == self._cod_intermediario.DSVT:
+            self._pilha_case[-1]['operador2'] = self._cod_intermediario.getLc() + 1
+
+            del self._pilha_case[-1]
+
+        dsvt = self._cod_intermediario.add(self._cod_intermediario.DSVF, '-', 9999)
+        self._pilha_case.append(dsvt)
 
     def _acao_semantica_135(self):
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+
+        self._pilha_case[-1]['operador2'] = self._cod_intermediario.getLc() + 1
+
+        del self._pilha_case[-1]
+
+        dsvt = self._cod_intermediario.add(self._cod_intermediario.DSVS, '-', 9999)
+        self._pilha_case.append(dsvt)
+
+
 
     def _acao_semantica_136(self, token):
 
         self._cod_intermediario.add(self._cod_intermediario.COPI, '-', '-')
-        self._cod_intermediario.print()
-        print(token)
+        self._cod_intermediario.add(self._cod_intermediario.CRCT, '-', token['token'])
+        self._cod_intermediario.add(self._cod_intermediario.CMIG, '-', '-')
 
-        raise Exception('mexendo aqui')
+        dsvt = self._cod_intermediario.add(self._cod_intermediario.DSVT, '-', 9999)
 
+        self._pilha_case.append(dsvt)
 
     def _acao_semantica_137(self, token):
 

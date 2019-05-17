@@ -131,11 +131,9 @@ code = 'program classe; \
 				var i : integer; \
 				Begin \
 					case i of \
-                        10: \
-					        Writeln(11); \
-					    30: \
-                            writeln(8); \
-                     end; \
+                        10, 20: Writeln(11); \
+                        30: Writeln(8) \
+                     end \
             end.'
 
 
