@@ -23,7 +23,9 @@ class TabelaSimbolos:
         if item._next:
             self._print_nome_recursive(item._next)
 
-
+    """
+    :return ItemTabelaSimbolo
+    """
     def add(self, item):
 
         # gerando chave
@@ -45,13 +47,13 @@ class TabelaSimbolos:
     Buscando o item pelo nome do item
     :return ItemTabelaSimbolo
     """
-    def find(self, nome):
+    def find(self, nome, nivel):
 
         hash = self._convert_word_in_hash(nome)
 
-        return self._find_by_hash(hash)
+        return self._find_by_hash(hash, nivel)
 
-    def _find_by_hash(self, hash):
+    def _find_by_hash(self, hash, nivel):
 
         i = self._convert_word_in_index(hash)
 
@@ -60,7 +62,7 @@ class TabelaSimbolos:
         # pega o primeiro item que tenha aquele nome
         # TODO verificar com o professor se esta certo, acho que tem que informar o escopo
         while item != None:
-            if item._hash == hash:
+            if item._hash == hash and item.nivel == nivel:
                 return item
 
             item = item._next

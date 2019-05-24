@@ -1,6 +1,7 @@
-from src.tabela_simbolos import TabelaSimbolos
-from src.item_tabela_simbolo import ItemTabelaSimbolo
 from src.gerador_codigo_intermediario import GeradorCodigoIntermediario
+from src.item_tabela_simbolo import ItemTabelaSimbolo
+from src.tabela_simbolos import TabelaSimbolos
+
 
 class AnalisadorSemantico:
 
@@ -25,7 +26,7 @@ class AnalisadorSemantico:
         elif codigo_acao == 107:
             self._acao_semantica_107()
         elif codigo_acao == 108:
-            self._acao_semantica_108()
+            self._acao_semantica_108(token_nao_terminal_atual)
         elif codigo_acao == 109:
             self._acao_semantica_109()
         elif codigo_acao == 110:
@@ -153,6 +154,11 @@ class AnalisadorSemantico:
         self._variavel_a_esquerda = None
         self._constante_a_esquerda = None
 
+        #controle procedure
+        self._procedure = None
+        self._procedure_nr_parametros = 0
+        self._procedure_houve_parametro = False
+
 
 
     def _acao_semantica_101(self):
@@ -191,8 +197,21 @@ class AnalisadorSemantico:
 
                 self._numero_variaveis = self._numero_variaveis + 1
 
-        elif self._tipo_identificador == 'paramentro':
-            raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+        elif self._tipo_identificador == 'parametro':
+
+            if self._ts.find(token['token'], self._nivel_atual):
+                raise Exception('Parametro já declarado')  # TODO colocar linha
+            else:
+
+                self._ts.add(ItemTabelaSimbolo(
+                    token['token'],
+                    'parametro',
+                    self._nivel_atual,
+                    '-',
+                    '-'
+                ))
+
+                self._procedure_nr_parametros = self._procedure_nr_parametros + 1
 
     def _acao_semantica_105(self, token):
         if self._ts.find(token['token']):
@@ -216,17 +235,32 @@ class AnalisadorSemantico:
     def _acao_semantica_107(self):
         self._tipo_identificador = 'variavel'
 
-    def _acao_semantica_108(self):
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+    def _acao_semantica_108(self, token):
+
+        self._procedure = self._ts.add(ItemTabelaSimbolo(
+            token['token'],
+            'proc',
+            self._nivel_atual,
+            self._topo,
+            '-'
+        ))
+
+        self._procedure_houve_parametro = False
+        self._procedure_nr_parametros = 0
+        self._nivel_atual = self._nivel_atual + 1
 
     def _acao_semantica_109(self):
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+
+        if self._procedure_houve_parametro == True:
+            self._procedure.dado2 = self._procedure_nr_parametros
 
     def _acao_semantica_110(self):
         raise Exception('Falta desenvolver')  # TODO Falta desenvolver
 
     def _acao_semantica_111(self):
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+
+        self._tipo_identificador = 'parametro'
+        self._procedure_houve_parametro = True
 
     def _acao_semantica_114(self, token):
 

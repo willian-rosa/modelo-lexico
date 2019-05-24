@@ -135,6 +135,45 @@ code = 'program classe; \
                         30: Writeln(8) \
                      end \
             end.'
+code = 'PROGRAM TESTEPROC1; \
+        PROCEDURE PRINT(A,B:INTEGER); \
+        BEGIN \
+            WRITELN(77); \
+        END; \
+        \
+        BEGIN \
+            CALL PRINT(11,12); \
+            END.'
+
+
+
+
+
+
+
+
+
+
+
+
+
+code = 'program classe; \
+	        var \
+                a: integer; \
+                b: integer; \
+                c: integer; \
+            begin \
+                b := 1; \
+                c := 2; \
+                a := 3; \
+            end.'
+
+
+
+
+
+
+
 
 
 
