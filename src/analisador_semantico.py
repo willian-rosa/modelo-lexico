@@ -38,7 +38,7 @@ class AnalisadorSemantico:
         elif codigo_acao == 115:
             self._acao_semantica_115()
         elif codigo_acao == 116:
-            self._acao_semantica_116()
+            self._acao_semantica_116(token_nao_terminal_atual)
         elif codigo_acao == 117:
             self._acao_semantica_117()
         elif codigo_acao == 118:
@@ -155,25 +155,17 @@ class AnalisadorSemantico:
         self._constante_a_esquerda = None
 
         #controle procedure
+        self._pilha_procedures = []
         self._procedure = None
         self._procedure_nr_parametros = 0
         self._procedure_houve_parametro = False
 
-
-
     def _acao_semantica_101(self):
-        #Gera instrução PARA
-        # Verifica utilização de rótulos através da tabela de símbolos
-
         self._cod_intermediario.add(self._cod_intermediario.PARA, '-', '-')
-
-        # TODO Verifica utilização de rótulos através da tabela de símbolos
-
 
     def _acao_semantica_102(self):
 
         self._cod_intermediario.add(self._cod_intermediario.AMEM, '-', self._deslocamento + self._numero_variaveis)
-
 
     def _acao_semantica_104(self, token):
 
@@ -181,7 +173,7 @@ class AnalisadorSemantico:
             raise Exception('Falta desenvolver')  # TODO Falta desenvolver
         elif self._tipo_identificador == 'variavel':
 
-            if self._ts.find(token['token']):
+            if self._ts.find(token['token'], self._nivel_atual):
                 raise Exception('Variavel já declarada') #TODO colocar linha
             else:
 
@@ -251,11 +243,34 @@ class AnalisadorSemantico:
 
     def _acao_semantica_109(self):
 
+        # TODO devenvolver, verificar esse bloco inteiro
+
         if self._procedure_houve_parametro == True:
+
             self._procedure.dado2 = self._procedure_nr_parametros
 
+            # TODO desenvolver
+            # primeiro parâmetro –> deslocamento = -(np)segundo parâmetro –> deslocamento = -(np –1)
+
+
+        self._pilha_procedures.append(self._cod_intermediario.add(self._cod_intermediario.DSVS, '-', 999))
+
+
     def _acao_semantica_110(self):
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+
+        self._cod_intermediario.add(self._cod_intermediario.RETU, '-', self._procedure_nr_parametros)
+
+        self._procedure = None
+        self._procedure_nr_parametros = 0
+        self._procedure_houve_parametro = False
+
+        self._pilha_procedures[-1]['operador2'] = self._cod_intermediario.getLc()
+        del self._pilha_procedures[-1]
+
+        # TODO devesenvolver, deleta nomes do escopo do nível na TS
+
+        self._nivel_atual = self._nivel_atual - 1
+
 
     def _acao_semantica_111(self):
 
@@ -264,7 +279,9 @@ class AnalisadorSemantico:
 
     def _acao_semantica_114(self, token):
 
-        identificador = self._ts.find(token['token'])
+        print(token['token'], self._nivel_atual)
+
+        identificador = self._ts.find(token['token'], self._nivel_atual)
 
         if identificador:
             if identificador.categoria == 'variavel':
@@ -278,14 +295,28 @@ class AnalisadorSemantico:
 
         self._cod_intermediario.add(self._cod_intermediario.ARMZ, self._nivel_atual, self._variavel_a_esquerda.dado1)
 
-    def _acao_semantica_116(self):
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+    def _acao_semantica_116(self, token):
+
+        itemTs = self._ts.find(token['token'], self._nivel_atual) # TODO vai ter que pegar os niveis mais alto tambem
+
+        if itemTs.categoria == 'proc':
+            self._procedure = itemTs
+        else:
+            raise Exception('Procedure não declarada')
 
     def _acao_semantica_117(self):
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+
+        if self._procedure.dado2 != self._procedure_nr_parametros:
+            raise Exception('A procedure "'+self._procedure.nome+'" '
+                            + 'necessita de '+str(self._procedure.dado2)+' parametros '
+                            + 'e foram passados '+str(self._procedure_nr_parametros)+' parametros')
+        else:
+            self._cod_intermediario.add(self._cod_intermediario.CALL, self._procedure.nivel, self._procedure.dado1)
 
     def _acao_semantica_118(self):
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+
+        self._procedure_nr_parametros = self._procedure_nr_parametros + 1
+
 
     def _acao_semantica_120(self):
 
@@ -342,7 +373,7 @@ class AnalisadorSemantico:
 
     def _acao_semantica_129(self, token):
 
-        id = self._ts.find(token['token'])
+        id = self._ts.find(token['token'], self._nivel_atual)
 
         if self._contexto == 'readln':
 

@@ -135,6 +135,7 @@ code = 'program classe; \
                         30: Writeln(8) \
                      end \
             end.'
+
 code = 'PROGRAM TESTEPROC1; \
         PROCEDURE PRINT(A,B:INTEGER); \
         BEGIN \
@@ -145,30 +146,41 @@ code = 'PROGRAM TESTEPROC1; \
             CALL PRINT(11,12); \
             END.'
 
+code = 'PROGRAM TESTEPROC2; \
+    PROCEDURE PRINT(A,B:INTEGER); \
+    VAR I,J:INTEGER; \
+    BEGIN \
+        WRITELN(77); \
+    END; \
+    BEGIN \
+        CALL PRINT(11,12); \
+    END.'
+
+
+code = 'PROGRAM TESTEPROC3; \
+        PROCEDURE PRINT(A,B:INTEGER); \
+        VAR I,J:INTEGER; \
+        BEGIN \
+            J := 55; \
+        END; \
+        BEGIN \
+            CALL PRINT(11,12); \
+        END.'
 
 
 
 
 
-
-
-
-
-
-
-
-code = 'program classe; \
-	        var \
-                a: integer; \
-                b: integer; \
-                c: integer; \
-            begin \
-                b := 1; \
-                c := 2; \
-                a := 3; \
-            end.'
-
-
+# code = 'PROGRAM TESTEPROC4; \
+#         VAR X:INTEGER; \
+#         PROCEDURE PRINT(A,B:INTEGER); \
+#             VAR I,J:INTEGER; \
+#         BEGIN \
+#             X := 44; \
+#         END; \
+#         BEGIN \
+#             CALL PRINT(11,12); \
+#         END.'
 
 
 
