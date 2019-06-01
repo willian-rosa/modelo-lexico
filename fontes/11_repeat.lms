@@ -1,0 +1,10 @@
+program classe;
+Var
+	x : Integer;
+Begin
+	Repeat 
+        begin 
+            readln(x); 
+        end 
+	Until x > 10
+end.

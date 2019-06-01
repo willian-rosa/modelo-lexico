@@ -1,0 +1,10 @@
+program classe;
+var
+    a: integer;
+    b: integer;
+    c: integer;
+begin
+    b := 1;
+    c := 2;
+    a := 3;
+end.

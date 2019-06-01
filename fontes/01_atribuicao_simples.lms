@@ -1,0 +1,7 @@
+program classe;
+var x, y: integer;
+begin
+    x := 123;
+    y := 456;
+    writeln(x, y)
+end.

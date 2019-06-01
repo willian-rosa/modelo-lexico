@@ -1,0 +1,8 @@
+program classe;
+	var i : integer;
+Begin
+	case i of
+        10, 20: Writeln(11);
+        30: Writeln(8)
+     end
+end.

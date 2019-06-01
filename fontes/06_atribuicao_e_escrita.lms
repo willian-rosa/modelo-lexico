@@ -1,0 +1,7 @@
+program classe;
+var
+    x: integer;
+begin
+    x := 123;
+    writeln(x);
+end.

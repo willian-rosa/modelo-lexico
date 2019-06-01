@@ -1,0 +1,10 @@
+program classe;
+var
+    x: integer;
+begin
+    x := 123;
+    if x > 100 then
+        writeln(1)
+    else
+        writeln(0);
+end.

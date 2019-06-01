@@ -1,0 +1,6 @@
+program classe;
+	var x : integer;
+Begin
+	x := 123;
+	Writeln("Hello", x);
+end.

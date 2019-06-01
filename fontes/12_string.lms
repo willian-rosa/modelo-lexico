@@ -1,0 +1,5 @@
+program classe;
+Begin
+	Writeln("Hello");
+	Writeln("Hello2");
+end.

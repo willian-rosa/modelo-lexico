@@ -127,6 +127,10 @@ class AnalisadorSemantico:
         else:
             raise Exception('Identificador "'+str(token['token'])+'" não foi declarado')  # TODO colocar linha
 
+    def _diferenca_de_nivel(self, nivel_token):
+
+        return self._nivel_atual - nivel_token
+
     def _acao_semantica_100(self):
         self._pilhas = []
         self._ts = TabelaSimbolos()
@@ -160,12 +164,15 @@ class AnalisadorSemantico:
         self._procedure_nr_parametros = 0
         self._procedure_houve_parametro = False
 
+
     def _acao_semantica_101(self):
         self._cod_intermediario.add(self._cod_intermediario.PARA, '-', '-')
 
     def _acao_semantica_102(self):
 
         self._cod_intermediario.add(self._cod_intermediario.AMEM, '-', self._deslocamento + self._numero_variaveis)
+
+        self._numero_variaveis = 0
 
     def _acao_semantica_104(self, token):
 
@@ -233,7 +240,7 @@ class AnalisadorSemantico:
             token['token'],
             'proc',
             self._nivel_atual,
-            self._topo,
+            self._cod_intermediario.getLc() + 1,
             '-'
         ))
 
@@ -279,6 +286,8 @@ class AnalisadorSemantico:
 
     def _acao_semantica_114(self, token):
 
+        print(self._ts.find(token['token'], self._nivel_atual))
+        print(self._ts.find(token['token'], 0))
         print(token['token'], self._nivel_atual)
 
         identificador = self._ts.find(token['token'], self._nivel_atual)
@@ -293,7 +302,11 @@ class AnalisadorSemantico:
 
     def _acao_semantica_115(self):
 
-        self._cod_intermediario.add(self._cod_intermediario.ARMZ, self._nivel_atual, self._variavel_a_esquerda.dado1)
+        self._cod_intermediario.add(
+            self._cod_intermediario.ARMZ,
+            self._diferenca_de_nivel(self._variavel_a_esquerda.nivel),
+            self._variavel_a_esquerda.dado1
+        )
 
     def _acao_semantica_116(self, token):
 
@@ -311,7 +324,11 @@ class AnalisadorSemantico:
                             + 'necessita de '+str(self._procedure.dado2)+' parametros '
                             + 'e foram passados '+str(self._procedure_nr_parametros)+' parametros')
         else:
-            self._cod_intermediario.add(self._cod_intermediario.CALL, self._procedure.nivel, self._procedure.dado1)
+            self._cod_intermediario.add(
+                self._cod_intermediario.CALL,
+                self._diferenca_de_nivel(self._procedure.nivel),
+                self._procedure.dado1
+            )
 
     def _acao_semantica_118(self):
 
@@ -381,7 +398,11 @@ class AnalisadorSemantico:
 
                 self._cod_intermediario.add(self._cod_intermediario.LEIT, '-', '-')
 
-                self._cod_intermediario.add(self._cod_intermediario.ARMZ, self._nivel_atual, id.dado1)
+                self._cod_intermediario.add(
+                    self._cod_intermediario.ARMZ,
+                    self._diferenca_de_nivel(id.nivel),
+                    id.dado1
+                )
 
                 self._topo = self._topo + 1
 
@@ -465,7 +486,11 @@ class AnalisadorSemantico:
             self._variavel_a_esquerda = self._ts.find(token['token'])
 
     def _acao_semantica_138(self):
-        self._cod_intermediario.add(self._cod_intermediario.ARMZ, self._nivel_atual, self._variavel_a_esquerda.dado1)
+        self._cod_intermediario.add(
+            self._cod_intermediario.ARMZ,
+            self._diferenca_de_nivel(self._variavel_a_esquerda.nivel),
+            self._variavel_a_esquerda.dado1
+        )
 
     def _acao_semantica_139(self):
 
@@ -492,7 +517,11 @@ class AnalisadorSemantico:
         self._cod_intermediario.add(self._cod_intermediario.SOMA, '-', '-')
         self._topo = self._topo + 2
 
-        self._cod_intermediario.add(self._cod_intermediario.ARMZ, self._nivel_atual, self._pilha_fors[-1].dado1)
+        self._cod_intermediario.add(
+            self._cod_intermediario.ARMZ,
+            self._diferenca_de_nivel(self._pilha_fors[-1].nivel),
+            self._pilha_fors[-1].dado1
+        )
 
         self._pilha_fors[-2]['operador2'] = self._cod_intermediario.getLc() + 1
 

@@ -1,0 +1,9 @@
+program classe;
+Const
+    a = 123;
+var
+    b: integer;
+begin
+    writeln(a);
+    b := a + 1;
+end.

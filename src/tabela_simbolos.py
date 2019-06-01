@@ -47,25 +47,37 @@ class TabelaSimbolos:
     Buscando o item pelo nome do item
     :return ItemTabelaSimbolo
     """
-    def find(self, nome, nivel):
+    def find(self, nome, nivel_base):
 
         hash = self._convert_word_in_hash(nome)
 
-        return self._find_by_hash(hash, nivel)
+        return self._find_by_hash(hash, nivel_base)
 
-    def _find_by_hash(self, hash, nivel):
+    def _find_by_hash(self, hash, nivel_base):
 
         i = self._convert_word_in_index(hash)
 
         item = self._items[i]
 
-        # pega o primeiro item que tenha aquele nome
-        # TODO verificar com o professor se esta certo, acho que tem que informar o escopo
+        items_found = []
+
+        # percorrendo a arvore para encontrar os itens correspondente ao token
         while item != None:
-            if item._hash == hash and item.nivel == nivel:
-                return item
+            if item._hash == hash and item.nivel <= nivel_base:
+                items_found.append(item)
 
             item = item._next
+
+        # buscando o maior nivel
+        if len(items_found):
+
+            item_max = items_found[0]
+
+            for item_found in items_found:
+                if item_found.nivel > item_max.nivel:
+                    item_max = item_found
+
+            return item_max
 
         return None
 
