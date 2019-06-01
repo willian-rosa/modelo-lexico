@@ -160,8 +160,9 @@ class AnalisadorSemantico:
 
         #controle procedure
         self._pilha_procedures = []
+        self._pilha_ctrl_procedures = []
         self._procedure = None
-        self._procedure_nr_parametros = 0
+        self._procedure_parametros = []
         self._procedure_houve_parametro = False
 
 
@@ -198,11 +199,13 @@ class AnalisadorSemantico:
 
         elif self._tipo_identificador == 'parametro':
 
-            if self._ts.find(token['token'], self._nivel_atual):
+            paramTs = self._ts.find(token['token'], self._nivel_atual)
+
+            if paramTs and paramTs.nivel == self._nivel_atual:
                 raise Exception('Parametro já declarado')  # TODO colocar linha
             else:
 
-                self._ts.add(ItemTabelaSimbolo(
+                param = self._ts.add(ItemTabelaSimbolo(
                     token['token'],
                     'parametro',
                     self._nivel_atual,
@@ -210,7 +213,7 @@ class AnalisadorSemantico:
                     '-'
                 ))
 
-                self._procedure_nr_parametros = self._procedure_nr_parametros + 1
+                self._procedure_parametros.append(param)
 
     def _acao_semantica_105(self, token):
         if self._ts.find(token['token']):
@@ -241,34 +244,39 @@ class AnalisadorSemantico:
             'proc',
             self._nivel_atual,
             self._cod_intermediario.getLc() + 1,
-            '-'
+            0
         ))
 
         self._procedure_houve_parametro = False
-        self._procedure_nr_parametros = 0
+        self._procedure_parametros = []
         self._nivel_atual = self._nivel_atual + 1
+
+        self._pilha_ctrl_procedures.append(self._procedure)
 
     def _acao_semantica_109(self):
 
-        # TODO devenvolver, verificar esse bloco inteiro
-
         if self._procedure_houve_parametro == True:
 
-            self._procedure.dado2 = self._procedure_nr_parametros
+            self._procedure.dado2 = len(self._procedure_parametros)
 
-            # TODO desenvolver
-            # primeiro parâmetro –> deslocamento = -(np)segundo parâmetro –> deslocamento = -(np –1)
-
+            for i, param in enumerate(self._procedure_parametros):
+                param.dado1 = -(self._procedure.dado2 - i)
 
         self._pilha_procedures.append(self._cod_intermediario.add(self._cod_intermediario.DSVS, '-', 999))
 
 
     def _acao_semantica_110(self):
 
-        self._cod_intermediario.add(self._cod_intermediario.RETU, '-', self._procedure_nr_parametros)
+        self._cod_intermediario.add(
+            self._cod_intermediario.RETU,
+            '-',
+            self._pilha_ctrl_procedures[-1].dado2
+        )
+
+        del self._pilha_ctrl_procedures[-1]
 
         self._procedure = None
-        self._procedure_nr_parametros = 0
+        self._procedure_parametros = []
         self._procedure_houve_parametro = False
 
         self._pilha_procedures[-1]['operador2'] = self._cod_intermediario.getLc()
@@ -319,10 +327,14 @@ class AnalisadorSemantico:
 
     def _acao_semantica_117(self):
 
-        if self._procedure.dado2 != self._procedure_nr_parametros:
+        # procedure_atual = self._pilha_ctrl_procedures[-1]
+
+        # print(procedure_atual._to_string())
+
+        if self._procedure.dado2 != len(self._procedure_parametros):
             raise Exception('A procedure "'+self._procedure.nome+'" '
                             + 'necessita de '+str(self._procedure.dado2)+' parametros '
-                            + 'e foram passados '+str(self._procedure_nr_parametros)+' parametros')
+                            + 'e foram passados '+str(len(self._procedure_parametros))+' parametros')
         else:
             self._cod_intermediario.add(
                 self._cod_intermediario.CALL,
@@ -331,9 +343,7 @@ class AnalisadorSemantico:
             )
 
     def _acao_semantica_118(self):
-
-        self._procedure_nr_parametros = self._procedure_nr_parametros + 1
-
+        self._procedure_parametros.append(None)
 
     def _acao_semantica_120(self):
 
@@ -414,7 +424,12 @@ class AnalisadorSemantico:
                 elif id.categoria == 'constante':
                     self._cod_intermediario.add(self._cod_intermediario.CRCT, '-', id.dado1)
                 else:
-                    self._cod_intermediario.add(self._cod_intermediario.CRVL, self._nivel_atual, id.dado1)
+                    print(id._to_string())
+                    self._cod_intermediario.add(
+                        self._cod_intermediario.CRVL,
+                        self._diferenca_de_nivel(id.nivel),
+                        id.dado1
+                    )
             else:
                 raise Exception('Identificador "' + str(token['token']) + '" não foi declarado')  # TODO colocar linha
 
@@ -498,7 +513,11 @@ class AnalisadorSemantico:
 
         self._cod_intermediario.add(self._cod_intermediario.COPI, '-', '-')
 
-        self._cod_intermediario.add(self._cod_intermediario.CRVL, self._nivel_atual, self._variavel_a_esquerda.dado1)
+        self._cod_intermediario.add(
+            self._cod_intermediario.CRVL,
+            self._diferenca_de_nivel(self._variavel_a_esquerda.nivel),
+            self._variavel_a_esquerda.dado1
+        )
 
         self._cod_intermediario.add(self._cod_intermediario.CMAI, '-', '-')
 
@@ -509,7 +528,11 @@ class AnalisadorSemantico:
 
     def _acao_semantica_140(self, token):
 
-        self._cod_intermediario.add(self._cod_intermediario.CRVL, self._nivel_atual, self._pilha_fors[-1].dado1)
+        self._cod_intermediario.add(
+            self._cod_intermediario.CRVL,
+            self._diferenca_de_nivel(self._pilha_fors[-1].nivel),
+            self._pilha_fors[-1].dado1
+        )
 
         # colocado constante valor 1 mesmo no CRCT, pq é o incremento do loop do FOR
         self._cod_intermediario.add(self._cod_intermediario.CRCT, '-', 1)

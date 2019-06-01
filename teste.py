@@ -11,16 +11,26 @@ asintatico = AnalisadorSintatico()
 
 code = ''
 
-code = 'PROGRAM TESTEPROC4; \
-        VAR X:INTEGER; \
-        PROCEDURE PRINT(A,B:INTEGER); \
-            VAR I,J:INTEGER; \
-        BEGIN \
-            X := 44; \
-        END; \
-        BEGIN \
-            CALL PRINT(11,12); \
-        END.'
+code = 'PROGRAM TESTEPROC7; \
+             \
+            PROCEDURE P1; \
+                 \
+                PROCEDURE P2; \
+                     \
+                    PROCEDURE P3(V:INTEGER); \
+                    BEGIN \
+                        WRITELN(V); \
+                    END; \
+                BEGIN \
+                    CALL P3(33); \
+                END; \
+            BEGIN \
+                CALL P2; \
+            END; \
+             \
+            BEGIN \
+                CALL P1; \
+            END. '
 
 
 
