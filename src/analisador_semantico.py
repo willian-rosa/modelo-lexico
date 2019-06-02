@@ -6,7 +6,6 @@ from src.tabela_simbolos import TabelaSimbolos
 class AnalisadorSemantico:
 
     def __init__(self, gerador_codigo: GeradorCodigoIntermediario):
-        print("iniciando analisador semantico")
         self._cod_intermediario = gerador_codigo
 
     def executeAcao(self, codigo_acao, token_nao_terminal_atual):
@@ -294,10 +293,6 @@ class AnalisadorSemantico:
 
     def _acao_semantica_114(self, token):
 
-        print(self._ts.find(token['token'], self._nivel_atual))
-        print(self._ts.find(token['token'], 0))
-        print(token['token'], self._nivel_atual)
-
         identificador = self._ts.find(token['token'], self._nivel_atual)
 
         if identificador:
@@ -326,10 +321,6 @@ class AnalisadorSemantico:
             raise Exception('Procedure não declarada')
 
     def _acao_semantica_117(self):
-
-        # procedure_atual = self._pilha_ctrl_procedures[-1]
-
-        # print(procedure_atual._to_string())
 
         if self._procedure.dado2 != len(self._procedure_parametros):
             raise Exception('A procedure "'+self._procedure.nome+'" '
@@ -424,7 +415,6 @@ class AnalisadorSemantico:
                 elif id.categoria == 'constante':
                     self._cod_intermediario.add(self._cod_intermediario.CRCT, '-', id.dado1)
                 else:
-                    print(id._to_string())
                     self._cod_intermediario.add(
                         self._cod_intermediario.CRVL,
                         self._diferenca_de_nivel(id.nivel),
@@ -562,7 +552,8 @@ class AnalisadorSemantico:
         self._topo = self._topo + 2
 
     def _acao_semantica_143(self):
-        raise Exception('Falta desenvolver')  # TODO Falta desenvolver
+        self._cod_intermediario.add(self._cod_intermediario.CMME, '-', '-')
+        self._topo = self._topo + 2
 
     def _acao_semantica_144(self):
         raise Exception('Falta desenvolver')  # TODO Falta desenvolver

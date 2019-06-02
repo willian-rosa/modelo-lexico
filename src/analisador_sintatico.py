@@ -3,9 +3,9 @@ from src.analisador_semantico import AnalisadorSemantico
 
 class AnalisadorSintatico(Analisador):
 
-    pilha = []
-
-    analisador_semantico = None
+    def __init__(self):
+        self.pilha = []
+        self.analisador_semantico = None
 
     # pega item na tabela de parse
     def _get_in_parse(self, topo_pilha, codigo_token_entrada):
@@ -48,11 +48,11 @@ class AnalisadorSintatico(Analisador):
 
         numero_acao_semantica = topo_pilha - self.c_inicio_acoes_semantica
 
-        print("tratando acao de código: " + str(numero_acao_semantica))
-
         self.analisador_semantico.executeAcao(numero_acao_semantica, token_nao_terminal_atual)
 
-    def analise(self, tokens: list, gerador_codigo):
+    def analise(self, tokens_lexicos: list, gerador_codigo):
+
+        tokens = tokens_lexicos.copy()
 
         self.analisador_semantico = AnalisadorSemantico(gerador_codigo)
 

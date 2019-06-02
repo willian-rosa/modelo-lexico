@@ -22,13 +22,14 @@ class AnalisadorLexico(Analisador):
 
     numeros = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-    linha = 1
-    coluna = 1
-    estado = None
-    coletor = ''
-    tabela_tokens = []
-    codes = []
-    palavras_resevadas = []
+    def __init__(self):
+        self.linha = 1
+        self.coluna = 1
+        self.estado = None
+        self.coletor = ''
+        self.tabela_tokens = []
+        self.codes = []
+        self.palavras_resevadas = []
 
     def add_codigo(self, path_file, code):
         # TODO fazer indeficação se é ultimo caracter no arquivo

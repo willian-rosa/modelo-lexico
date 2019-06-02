@@ -11,33 +11,25 @@ asintatico = AnalisadorSintatico()
 
 code = ''
 
-code = 'PROGRAM TESTEPROC7; \
-             \
+code = 'PROGRAM TESTEPROC8; \
+            VAR \
+                CONT: INTEGER; \
             PROCEDURE P1; \
-                 \
-                PROCEDURE P2; \
-                     \
-                    PROCEDURE P3(V:INTEGER); \
+                    PROCEDURE P2; \
                     BEGIN \
-                        WRITELN(V); \
+                        WRITELN(CONT); \
+                        CONT := CONT + 1; \
+                        IF CONT < 5 THEN \
+                            CALL P1; \
                     END; \
-                BEGIN \
-                    CALL P3(33); \
-                END; \
             BEGIN \
                 CALL P2; \
             END; \
              \
             BEGIN \
+                CONT := 0; \
                 CALL P1; \
-            END. '
-
-
-
-
-
-
-
+            END.'
 
 alexico.clear()
 

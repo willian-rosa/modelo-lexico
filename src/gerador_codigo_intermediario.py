@@ -32,15 +32,10 @@ class GeradorCodigoIntermediario:
     COPI = 28  # COPI - -
     DSVT = 29  # DSVT - a ######################## Suponho #####################
 
-    _tabela = []
+    def __init__(self):
+        self._tabela = []
 
     def add(self, codigo, operador1, operador2):
-
-        # comandos = ['', 'RETU', 'CRVL', 'CRCT', 'ARMZ', 'SOMA', 'SUBT', 'MULT', 'DIVI', 'INVR', 'NEGA', 'CONJ', 'DISJ',
-        #             'CMME', 'CMMA', 'CMIG', 'CMDF', 'CMEI', 'CMAI', 'DSVS', 'DSVF', 'LEIT', 'IMPR', 'IMPRL', 'AMEM',
-        #             'CALL', 'PARA', 'NADA', 'COPI', 'DSVT']
-        #
-        # print(comandos[codigo], operador1, operador2)
 
         instrucao = {
             'codigo': codigo,
@@ -55,6 +50,19 @@ class GeradorCodigoIntermediario:
 
     def getLc(self):
         return len(self._tabela)
+
+    def _to_string(self):
+
+        comandos = ['', 'RETU', 'CRVL', 'CRCT', 'ARMZ', 'SOMA', 'SUBT', 'MULT', 'DIVI', 'INVR', 'NEGA', 'CONJ', 'DISJ',
+                    'CMME', 'CMMA', 'CMIG', 'CMDF', 'CMEI', 'CMAI', 'DSVS', 'DSVF', 'LEIT', 'IMPR', 'IMPRL', 'AMEM',
+                    'CALL', 'PARA', 'NADA', 'COPI', 'DSVT']
+
+        cods = '';
+
+        for i, item in enumerate(self._tabela):
+            cods = cods + str(i) + comandos[item['codigo']] + str(item['operador1']) + str(item['operador2']) + "\n"
+
+        return cods
 
     def print(self):
 
