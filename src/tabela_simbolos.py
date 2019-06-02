@@ -4,11 +4,9 @@ class TabelaSimbolos:
 
     _tamanho_array = 5
 
-    # iniciando a variavel com tamanho determiando de itens
-    _items = [None for x in range(_tamanho_array)]
-
     def __init__(self):
-        pass
+        # iniciando a variavel com tamanho determiando de itens
+        self._items = [None for x in range(self._tamanho_array)]
 
     def print(self):
 

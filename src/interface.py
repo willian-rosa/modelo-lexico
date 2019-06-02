@@ -9,8 +9,9 @@ class Application:
     container_esquerdo = None
     txt = None
     txt_intermediario = None
-    items_result = []
+    txt_exe = None
     fun_analise = None
+    label_mensagem = None
 
     def __init__(self, fun_analise):
         self.fun_analise = fun_analise
@@ -60,6 +61,8 @@ class Application:
 
         Button(container_meio, text="Analisar Código", fg="black", command=self.click_analisar).pack()
 
+        self.create_grid(container_esquerdo)
+
         self.refresh()
 
     def _load_file(self):
@@ -107,135 +110,82 @@ class Application:
 
         return textarea
 
-    def create_textarea_pequeno(self, container, txt):
-        textarea = scrolledtext.ScrolledText(container, width=60, height=10, undo=True)
+    def create_textarea_pequeno(self, container):
+        textarea = scrolledtext.ScrolledText(container, width=80, height=10, undo=True)
         textarea.grid(columnspan=20)
-        #textarea.insert(INSERT, txt)
 
-        self.items_result.append(textarea)
+        return textarea
 
-    def create_grid(self, container, tokens: list):
+    def create_grid(self, container):
 
-        items = []
-        label = Label(container, text="Código")
-        label["font"] = ("Arial", "11")
-        label.grid(row=0, column=0)
+        self.label_mensagem = Label(container, fg="green", font=("Arial", "11"))
+        self.label_mensagem.grid(columnspan=3)
 
-        items.append(label)
+        Label(container, text="Código", font=("Arial", "11"), width=7, anchor=W, justify=LEFT).grid(row=1, column=0)
+        Label(container, text="Token", font=("Arial", "11"), width=24, anchor=W, justify=LEFT).grid(row=1, column=1)
+        Label(container, text="Descrição", font=("Arial", "11"), width=20, anchor=W, justify=LEFT).grid(row=1, column=2)
 
-        label = Label(container, text="Token")
-        label["font"] = ("Arial", "11")
-        label.grid(row=0, column=1)
+        self.txt_intermediario = self.create_textarea_pequeno(container)
+        self.txt_exe = self.create_textarea_pequeno(container)
 
-        items.append(label)
+    def populate_grid(self, data_view):
 
-        label = Label(container, text="Descrição")
-        label["font"] = ("Arial", "11")
-        label.grid(row=0, column=2)
+        self.txt_intermediario.delete('1.0', END)
+        self.txt_exe.delete('1.0', END)
 
-        items.append(label)
+        if 'tokens' in data_view:
+            tokens = data_view['tokens']
 
-        # Create a frame for the canvas with non-zero row&column weights
-        frame_canvas = Frame(container)
-        frame_canvas.grid(row=2, column=0, columnspan=3)
-        frame_canvas.grid_rowconfigure(0, weight=1)
-        frame_canvas.grid_columnconfigure(0, weight=1)
-        # Set grid_propagate to False to allow 5-by-5 buttons resizing later
-        frame_canvas.grid_propagate(False)
+            code = ''
 
-        # Add a canvas in that frame
-        canvas = Canvas(frame_canvas, bg="yellow")
-        canvas.grid(row=0, column=0, sticky="news")
+            for token in tokens:
 
-        # Link a scrollbar to the canvas
-        vsb = Scrollbar(frame_canvas, orient="vertical", command=canvas.yview)
-        vsb.grid(row=0, column=1, sticky='ns')
-        canvas.configure(yscrollcommand=vsb.set)
+                token_codigo = str(token['codigo'])
+                token_token = str(token['token'])
+                token_descricao = str(token['descricao'])
 
-        # Create a frame to contain the buttons
-        frame_buttons = Frame(canvas, bg="blue")
-        canvas.create_window((0, 0), window=frame_buttons, anchor='nw')
+                code = code + str(token_codigo) + self.generate_spaces(10, len(token_codigo))
+                code = code + str(token_token)  + self.generate_spaces(25, len(token_token))
+                code = code + token_descricao   + self.generate_spaces(45, len(token_descricao))
 
-        tabela_tokens = [[Entry() for j in range(3)] for i in enumerate(tokens)]
+                code = code + "\n"
 
-        for i, token in enumerate(tokens):
+            self.txt_intermediario.insert(INSERT, code)
 
-            r = i + 1
+        if 'cod_inter' in data_view:
+            cod_inter = data_view['cod_inter']
+            self.txt_exe.insert(INSERT, cod_inter)
 
-            for j, valor in enumerate(['codigo', 'token', 'descricao']):  # Columns
+        pass
 
-                b = Entry(frame_buttons)
-                b.insert(0, token[valor])
-                items.append(b)
-                b.grid(row=r, column=j, sticky='news')
-                tabela_tokens[i][j] = b
+    @staticmethod
+    def generate_spaces(limit, current_len):
 
-        # Update buttons frames idle tasks to let tkinter calculate buttons sizes
-        frame_buttons.update_idletasks()
+        spaces = ''
 
-        num_max = 15
-        if len(tokens) < num_max:
-            num_max = len(tokens)
+        if current_len < limit:
+            for i in range(limit - current_len):
+                spaces = spaces + " "
+        return spaces
 
-        # Resize the canvas frame to show exactly 5-by-5 buttons and the scrollbar
-        first5columns_width = sum([tabela_tokens[0][j].winfo_width() for j in range(0, 3)])
-        first5rows_height = sum([tabela_tokens[i][0].winfo_height() for i in range(0, num_max)])
-        frame_canvas.config(width=first5columns_width + vsb.winfo_width(), height=first5rows_height)
-
-        # Set the canvas scrolling region
-        canvas.config(scrollregion=canvas.bbox("all"))
-
-        self.items_result.append(frame_canvas)
-
-    def create_grid_erro(self, container, erro):
-
-        label = Label(container, text=erro, fg="red")
-        label["font"] = ("Arial", "11")
-        label.grid(columnspan=20)
-
-        self.items_result.append(label)
-
-    def create_grid_sucesso(self, container, msg):
-
-        label = Label(container, text=msg, fg="green")
-        label["font"] = ("Arial", "11")
-        label.grid(columnspan=20)
-
-        self.items_result.append(label)
+    def print_mensagem(self, color, msg):
+        self.label_mensagem['fg'] = color
+        self.label_mensagem['text'] = msg
 
     def click_analisar(self):
-
-        for widget in self.items_result:
-            widget.destroy()
 
         code = self.txt.get("1.0", "end-1c")
 
         data_view = {}
         data_view['code'] = code
 
-        msg_erro = None
+        msg = None
 
         try:
             self.fun_analise(data_view)
+            msg = 'Compilado com sucesso.'
+            self.print_mensagem('green', 'Compilado com sucesso.')
         except Exception as e:
-            msg_erro = e
+            self.print_mensagem('red', e)
 
-        tokens_lexicos = []
-        cod_inter = ''
-
-        if 'tokens' in data_view:
-            tokens_lexicos = data_view['tokens']
-
-        if 'cod_inter' in data_view:
-            cod_inter = data_view['cod_inter']
-
-
-
-        self.create_grid(self.container_esquerdo, tokens_lexicos)
-
-        if msg_erro == None:
-            self.create_grid_sucesso(self.container_esquerdo, 'Compilado com sucesso.')
-        else:
-            self.create_grid_erro(self.container_esquerdo, msg_erro)
-
-        self.create_textarea_pequeno(self.container_esquerdo, cod_inter)
+        self.populate_grid(data_view)

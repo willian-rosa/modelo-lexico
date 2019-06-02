@@ -1,15 +1,9 @@
 class ItemTabelaSimbolo:
 
-    _hash = None
-    _next = None
-
-    nome = None
-    categoria = None
-    nivel = None
-    dado1 = None
-    dado2 = None
-
     def __init__(self, nome, categoria, nivel, dado1, dado2):
+        self._hash = None
+        self._next = None
+
         self.nome = nome
         self.categoria = categoria
         self.nivel = nivel
