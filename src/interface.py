@@ -175,15 +175,10 @@ class Application:
     def click_analisar(self):
 
         code = self.txt.get("1.0", "end-1c")
-
-        data_view = {}
-        data_view['code'] = code
-
-        msg = None
+        data_view = {'code': code}
 
         try:
             self.fun_analise(data_view)
-            msg = 'Compilado com sucesso.'
             self.print_mensagem('green', 'Compilado com sucesso.')
         except Exception as e:
             self.print_mensagem('red', e)
